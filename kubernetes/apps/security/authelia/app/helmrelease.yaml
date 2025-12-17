@@ -26,6 +26,8 @@ spec:
         - name: users
           secret:
             secretName: authelia-users
+    secret:
+      existingSecret: authelia-secrets
     configMap:
       authentication_backend:
         file:
