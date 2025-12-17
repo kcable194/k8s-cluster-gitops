@@ -4,7 +4,7 @@ kind: Kustomization
 metadata:
   name: &app headlamp
 spec:
-  targetNamespace: headlamp
+  targetNamespace: monitoring
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
