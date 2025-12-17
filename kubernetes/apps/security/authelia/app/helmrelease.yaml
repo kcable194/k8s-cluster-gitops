@@ -1,0 +1,72 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: authelia
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: authelia
+      version: 0.9.12
+      sourceRef:
+        kind: HelmRepository
+        name: authelia
+        namespace: flux-system
+  values:
+    domain: keatoncable.com
+    ingress:
+      enabled: false
+    pod:
+      extraVolumeMounts:
+        - name: users
+          mountPath: /config/users.yaml
+          subPath: users.yaml
+      extraVolumes:
+        - name: users
+          secret:
+            secretName: authelia-users
+    configMap:
+      authentication_backend:
+        file:
+          enabled: true
+          path: /config/users.yaml
+      session:
+        cookies:
+          - domain: keatoncable.com
+            authelia_url: https://auth.keatoncable.com
+      storage:
+        local:
+          enabled: true
+      notifier:
+        filesystem:
+          enabled: true
+      access_control:
+        default_policy: one_factor
+        rules:
+          - domain: "*.keatoncable.com"
+            policy: one_factor
+      identity_providers:
+        oidc:
+          enabled: true
+          cors:
+            endpoints:
+              - authorization
+              - token
+              - revocation
+              - introspection
+              - userinfo
+          clients:
+            - client_id: headlamp
+              client_name: Headlamp
+              client_secret: "${HEADLAMP_OIDC_SECRET}"
+              public: false
+              authorization_policy: one_factor
+              redirect_uris:
+                - https://headlamp.keatoncable.com/oidc-callback
+              scopes:
+                - openid
+                - profile
+                - email
+                - groups
+              token_endpoint_auth_method: client_secret_basic
