@@ -13,10 +13,6 @@ spec:
         kind: HelmRepository
         name: authelia
         namespace: flux-system
-  valuesFrom:
-    - kind: Secret
-      name: authelia-helm-values
-      valuesKey: values.yaml
   values:
     domain: keatoncable.com
     ingress:
@@ -26,11 +22,19 @@ spec:
         - name: users
           mountPath: /config/users.yaml
           subPath: users.yaml
+        - name: oidc-jwks
+          mountPath: /secrets/oidc-jwks
+          readOnly: true
       extraVolumes:
         - name: users
           secret:
             secretName: authelia-users
+        - name: oidc-jwks
+          secret:
+            secretName: authelia-oidc-jwks
     configMap:
+      filters:
+        enableTemplating: true
       authentication_backend:
         file:
           enabled: true
@@ -53,6 +57,9 @@ spec:
       identity_providers:
         oidc:
           enabled: true
+          hmac_secret: '{{ secret "/secrets/internal/identity_providers.oidc.hmac.key" }}'
+          jwks:
+            - key: '{{ secret "/secrets/oidc-jwks/rsa.pem" | mindent 14 "|" | msquote }}'
           cors:
             endpoints:
               - authorization
