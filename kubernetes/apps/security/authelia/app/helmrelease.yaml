@@ -51,6 +51,9 @@ spec:
       identity_providers:
         oidc:
           enabled: true
+          jwks:
+            - key:
+                path: /secrets/internal/identity_providers.oidc.jwks.key
           cors:
             endpoints:
               - authorization
