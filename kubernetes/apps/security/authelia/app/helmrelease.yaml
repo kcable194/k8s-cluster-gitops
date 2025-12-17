@@ -59,7 +59,7 @@ spec:
           clients:
             - client_id: headlamp
               client_name: Headlamp
-              client_secret: "${HEADLAMP_OIDC_SECRET}"
+              client_secret: '$pbkdf2-sha512$310000$c2dzPnk1XBvX.chZbdbuDA$MlBQROOePcrKHWHM3KmmpFkNOVCIiBYFmi8SGEAYLq/TlCGA15pENkXUDX2y388pjDmQki4Htcc0PB6POAZBlg'
               public: false
               authorization_policy: one_factor
               redirect_uris:
