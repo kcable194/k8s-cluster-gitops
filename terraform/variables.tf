@@ -26,9 +26,9 @@ variable "nodes" {
     vm_storage   = string
   }))
   default = [
-    { name = "talos-1", ip = "192.168.68.41", mac_address = "BC:24:11:00:00:02", target_node = "pve5", vm_storage = "local" },
-    { name = "talos-2", ip = "192.168.68.42", mac_address = "BC:24:11:00:00:03", target_node = "pve2", vm_storage = "vm-storage" },
-    { name = "talos-3", ip = "192.168.68.43", mac_address = "BC:24:11:00:00:04", target_node = "pve3", vm_storage = "vm-storage" }
+    { name = "talos-1", ip = "192.168.68.41", mac_address = "bc:24:11:00:00:01", target_node = "pve5", vm_storage = "local" },
+    { name = "talos-2", ip = "192.168.68.42", mac_address = "bc:24:11:00:00:02", target_node = "pve2", vm_storage = "vm-storage" },
+    { name = "talos-3", ip = "192.168.68.43", mac_address = "bc:24:11:00:00:03", target_node = "pve3", vm_storage = "vm-storage" }
   ]
 }
 
