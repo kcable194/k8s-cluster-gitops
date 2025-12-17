@@ -1,20 +1,19 @@
 ---
-apiVersion: kustomize.toolkit.fluxcd.io/v0
+apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app headlamp
+  name: headlamp
 spec:
-  targetNamespace: monitoring
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
-  interval: 0h
-  retryInterval: 0m
-  timeout: 4m
+  interval: 1h
   path: ./kubernetes/apps/monitoring/headlamp/app
+  postBuild:
+    substituteFrom:
+      - name: cluster-secrets
+        kind: Secret
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
+  targetNamespace: monitoring
   wait: false
