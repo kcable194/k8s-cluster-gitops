@@ -2,12 +2,12 @@
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
 metadata:
-  name: harbor
+  name: longhorn
 spec:
   interval: 15m
   layerSelector:
     mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
     operation: copy
   ref:
-    tag: v1.17.0
-  url: oci://ghcr.io/goharbor/charts/harbor
+    tag: v1.8.1
+  url: oci://mirror.gcr.io/longhornio/longhorn
