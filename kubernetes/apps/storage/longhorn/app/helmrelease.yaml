@@ -1,0 +1,38 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: longhorn
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: longhorn
+  interval: 1h
+  values:
+    defaultSettings:
+      defaultReplicaCount: 2
+      defaultDataLocality: best-effort
+      defaultDataPath: /var/lib/longhorn
+      storageOverProvisioningPercentage: 100
+      storageMinimalAvailablePercentage: 10
+      guaranteedInstanceManagerCPU: 5
+      nodeDownPodDeletionPolicy: delete-both-statefulset-and-deployment-pod
+      orphanAutoDeletion: true
+      concurrentAutomaticEngineUpgradePerNodeLimit: 1
+    persistence:
+      defaultClass: true
+      defaultClassReplicaCount: 2
+      defaultFsType: ext4
+    longhornManager:
+      tolerations:
+        - key: node-role.kubernetes.io/control-plane
+          operator: Exists
+          effect: NoSchedule
+    longhornDriver:
+      tolerations:
+        - key: node-role.kubernetes.io/control-plane
+          operator: Exists
+          effect: NoSchedule
+    ingress:
+      enabled: false
+    enablePSP: false

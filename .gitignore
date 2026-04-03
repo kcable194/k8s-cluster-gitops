@@ -16,6 +16,9 @@ talosconfig
 # Terraform
 terraform/terraform.tfstate*
 terraform/.terraform/
+terraform/*.log
+# Local env overrides (secrets)
+.mise.local.toml
 # Misc.
 .private/
 .task/

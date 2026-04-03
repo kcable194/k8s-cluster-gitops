@@ -19,16 +19,18 @@ variable "proxmox_tls_insecure" {
 
 variable "nodes" {
   type = list(object({
-    name         = string
-    ip           = string
-    mac_address  = string
-    target_node  = string
-    vm_storage   = string
+    name        = string
+    ip          = string
+    mac_address = string
+    target_node = string
+    vm_storage  = string
+    vmid        = number
+    memory      = number
   }))
   default = [
-    { name = "talos-1", ip = "192.168.68.41", mac_address = "bc:24:11:00:00:01", target_node = "pve5", vm_storage = "local" },
-    { name = "talos-2", ip = "192.168.68.42", mac_address = "bc:24:11:00:00:02", target_node = "pve2", vm_storage = "vm-storage" },
-    { name = "talos-3", ip = "192.168.68.43", mac_address = "bc:24:11:00:00:03", target_node = "pve3", vm_storage = "vm-storage" }
+    { name = "talos-2", ip = "192.168.68.42", mac_address = "bc:24:11:00:00:02", target_node = "pve2", vm_storage = "local", vmid = 201, memory = 14336 },
+    { name = "talos-3", ip = "192.168.68.43", mac_address = "bc:24:11:00:00:03", target_node = "pve3", vm_storage = "local", vmid = 202, memory = 20480 },
+    { name = "talos-4", ip = "192.168.68.44", mac_address = "bc:24:11:00:00:04", target_node = "pve4", vm_storage = "local", vmid = 203, memory = 14336 }
   ]
 }
 
@@ -49,5 +51,5 @@ variable "nameservers" {
 
 variable "talos_iso" {
   type    = string
-  default = "local:iso/talos-v1.11.6-nocloud-amd64.iso"
+  default = "local:iso/talos-v1.12.6-nocloud-amd64.iso"
 }

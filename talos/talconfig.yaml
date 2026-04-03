@@ -19,31 +19,12 @@ cniConfig:
   name: none
 
 nodes:
-  - hostname: "talos-1"
-    ipAddress: "192.168.68.41"
-    installDisk: "/dev/sda"
-    machineSpec:
-      secureboot: false
-    talosImageURL: factory.talos.dev/installer/376567988ad370138ad8b2698212367b8edcb69b5fd68c80be1f2ec7d603b4ba
-    controlPlane: true
-    networkInterfaces:
-      - deviceSelector:
-          hardwareAddr: "bc:24:11:00:00:01"
-        dhcp: false
-        addresses:
-          - "192.168.68.41/24"
-        routes:
-          - network: "0.0.0.0/0"
-            gateway: "192.168.68.1"
-        mtu: 1500
-        vip:
-          ip: "192.168.68.40"
   - hostname: "talos-2"
     ipAddress: "192.168.68.42"
     installDisk: "/dev/sda"
     machineSpec:
       secureboot: false
-    talosImageURL: factory.talos.dev/installer/376567988ad370138ad8b2698212367b8edcb69b5fd68c80be1f2ec7d603b4ba
+    talosImageURL: factory.talos.dev/installer/88d1f7a5c4f1d3aba7df787c448c1d3d008ed29cfb34af53fa0df4336a56040b
     controlPlane: true
     networkInterfaces:
       - deviceSelector:
@@ -62,7 +43,7 @@ nodes:
     installDisk: "/dev/sda"
     machineSpec:
       secureboot: false
-    talosImageURL: factory.talos.dev/installer/376567988ad370138ad8b2698212367b8edcb69b5fd68c80be1f2ec7d603b4ba
+    talosImageURL: factory.talos.dev/installer/88d1f7a5c4f1d3aba7df787c448c1d3d008ed29cfb34af53fa0df4336a56040b
     controlPlane: true
     networkInterfaces:
       - deviceSelector:
@@ -76,11 +57,31 @@ nodes:
         mtu: 1500
         vip:
           ip: "192.168.68.40"
+  - hostname: "talos-4"
+    ipAddress: "192.168.68.44"
+    installDisk: "/dev/sda"
+    machineSpec:
+      secureboot: false
+    talosImageURL: factory.talos.dev/installer/88d1f7a5c4f1d3aba7df787c448c1d3d008ed29cfb34af53fa0df4336a56040b
+    controlPlane: true
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: "bc:24:11:00:00:04"
+        dhcp: false
+        addresses:
+          - "192.168.68.44/24"
+        routes:
+          - network: "0.0.0.0/0"
+            gateway: "192.168.68.1"
+        mtu: 1500
+        vip:
+          ip: "192.168.68.40"
 
 # Global patches
 patches:
   - "@./patches/global/machine-files.yaml"
   - "@./patches/global/machine-kubelet.yaml"
+  - "@./patches/global/machine-longhorn.yaml"
   - "@./patches/global/machine-network.yaml"
   - "@./patches/global/machine-sysctls.yaml"
   - "@./patches/global/machine-time.yaml"

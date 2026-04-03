@@ -6,7 +6,7 @@ metadata:
 spec:
   allowFirstLastIPs: "No"
   blocks:
-    - start: "192.168.68.44"
+    - start: "192.168.68.45"
       stop: "192.168.68.59"
 ---
 apiVersion: cilium.io/v2alpha1

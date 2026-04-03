@@ -3,20 +3,21 @@ resource "proxmox_vm_qemu" "talos" {
 
   name        = each.key
   target_node = each.value.target_node
-  vmid        = 200 + index(var.nodes, each.value)
+  vmid        = each.value.vmid
 
   # VM specs
   cpu {
     cores = 4
     type  = "x86-64-v2-AES"
   }
-  memory = 12288
-  scsihw = "virtio-scsi-single"
+  memory  = each.value.memory
+  machine = "q35"
+  scsihw  = "virtio-scsi-pci"
 
   # BIOS/boot settings
-  bios    = "seabios"
-  boot    = "order=scsi0;ide2"
-  agent   = 0  # Talos doesn't use qemu-agent
+  bios  = "seabios"
+  boot  = "order=scsi0;ide2"
+  agent = 0 # Set to 1 after Talos is bootstrapped with qemu-guest-agent extension
 
   # Disk
   disks {
@@ -40,9 +41,9 @@ resource "proxmox_vm_qemu" "talos" {
 
   # Network with static IP
   network {
-    id     = 0
-    model  = "virtio"
-    bridge = "vmbr0"
+    id      = 0
+    model   = "virtio"
+    bridge  = "vmbr0"
     macaddr = each.value.mac_address
   }
 
@@ -51,8 +52,8 @@ resource "proxmox_vm_qemu" "talos" {
   nameserver = var.nameservers
 
   # Cloud-init settings
-  os_type      = "cloud-init"
-  ciuser       = "root"
+  os_type = "cloud-init"
+  ciuser  = "root"
 
   # Start on boot
   onboot = true
