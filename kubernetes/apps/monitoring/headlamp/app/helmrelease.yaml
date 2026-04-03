@@ -14,5 +14,8 @@ spec:
         name: headlamp
         namespace: flux-system
   values:
+    serviceAccount:
+      create: false
+      name: headlamp-viewer
     service:
       type: ClusterIP
