@@ -17,7 +17,7 @@ spec:
       type: clusterIP
       tls:
         enabled: false
-    externalURL: http://harbor-core.harbor.svc.cluster.local
+    externalURL: https://harbor.${SECRET_DOMAIN}
     harborAdminPassword: "${HARBOR_ADMIN_PASSWORD}"
     secretKey: "${HARBOR_SECRET_KEY}"
     persistence:
