@@ -8,4 +8,5 @@ components:
 
 resources:
   - ./namespace.yaml
+  - ./networkpolicies.yaml
   - ./headlamp/ks.yaml

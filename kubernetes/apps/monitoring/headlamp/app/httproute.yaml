@@ -5,7 +5,7 @@ metadata:
   name: headlamp
 spec:
   hostnames:
-    - "headlamp.keatoncable.com"
+    - "headlamp.${SECRET_DOMAIN}"
   parentRefs:
     - name: envoy-internal
       namespace: network

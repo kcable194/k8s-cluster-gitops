@@ -13,6 +13,9 @@
 # Kubernetes
 kubeconfig
 talosconfig
+# Terraform
+terraform/terraform.tfstate*
+terraform/.terraform/
 # Misc.
 .private/
 .task/
