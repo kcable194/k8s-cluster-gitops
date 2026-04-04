@@ -50,6 +50,8 @@ spec:
 
     redis:
       enabled: true
+      image:
+        tag: latest
       master:
         persistence:
           enabled: true
