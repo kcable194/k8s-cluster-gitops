@@ -1,0 +1,110 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: forgejo
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: forgejo
+  interval: 1h
+  values:
+    image:
+      registry: codeberg.org
+      repository: forgejo/forgejo
+      tag: ""
+      rootless: true
+
+    replicaCount: 1
+    strategy:
+      type: Recreate
+
+    gitea:
+      admin:
+        username: forgejo-admin
+        password: "${FORGEJO_ADMIN_PASSWORD}"
+        email: "admin@${SECRET_DOMAIN}"
+
+      config:
+        APP_NAME: "Forgejo"
+
+        server:
+          DOMAIN: "forgejo.${SECRET_DOMAIN}"
+          ROOT_URL: "https://forgejo.${SECRET_DOMAIN}"
+          SSH_DOMAIN: "forgejo.${SECRET_DOMAIN}"
+          SSH_PORT: "22"
+          SSH_LISTEN_PORT: "2222"
+          LFS_START_SERVER: "true"
+
+        database:
+          DB_TYPE: postgres
+          HOST: "forgejo-postgres-rw:5432"
+          NAME: forgejo
+          USER: forgejo
+          PASSWD: "${FORGEJO_POSTGRES_PASSWORD}"
+
+        actions:
+          ENABLED: "true"
+          DEFAULT_ACTIONS_URL: "https://github.com"
+
+        packages:
+          ENABLED: "true"
+
+        oauth2:
+          ENABLED: "true"
+
+        repository:
+          DEFAULT_BRANCH: main
+          ENABLE_PUSH_CREATE_USER: "true"
+          ENABLE_PUSH_CREATE_ORG: "true"
+
+        service:
+          DISABLE_REGISTRATION: "true"
+          REQUIRE_SIGNIN_VIEW: "false"
+
+        security:
+          INSTALL_LOCK: "true"
+
+        session:
+          PROVIDER: db
+
+        cache:
+          ADAPTER: memory
+
+        queue:
+          TYPE: level
+
+        log:
+          LEVEL: info
+
+    persistence:
+      enabled: true
+      storageClass: longhorn
+      size: 100Gi
+      accessModes:
+        - ReadWriteOnce
+
+    service:
+      http:
+        type: ClusterIP
+        port: 3000
+      ssh:
+        type: LoadBalancer
+        port: 22
+        annotations:
+          lbipam.cilium.io/ips: "192.168.68.50"
+
+    postgresql:
+      enabled: false
+    postgresql-ha:
+      enabled: false
+    redis:
+      enabled: false
+    redis-cluster:
+      enabled: false
+
+    resources:
+      requests:
+        cpu: 200m
+      limits:
+        memory: 1Gi

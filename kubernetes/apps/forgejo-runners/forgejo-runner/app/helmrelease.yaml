@@ -1,0 +1,62 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: forgejo-runner
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: forgejo-runner
+  interval: 1h
+  values:
+    replicaCount: 1
+
+    runner:
+      config:
+        runner:
+          capacity: 2
+          timeout: 3h
+          labels:
+            - "ubuntu-latest:docker://catthehacker/ubuntu:act-latest"
+            - "docker:docker://node:22-bookworm"
+            - "self-hosted"
+          envs:
+            DOCKER_HOST: "tcp://127.0.0.1:2376"
+            DOCKER_TLS_VERIFY: "0"
+
+        container:
+          network: ""
+          privileged: true
+          docker_host: "tcp://127.0.0.1:2376"
+
+      instance: "https://forgejo.${SECRET_DOMAIN}"
+      existingSecret: forgejo-runner-token
+      secretKey: token
+
+    dind:
+      enabled: true
+      image:
+        repository: docker
+        tag: dind
+      args:
+        - dockerd
+        - --host=tcp://0.0.0.0:2376
+        - --tls=false
+        - --insecure-registry=forgejo-http.forgejo.svc.cluster.local:3000
+      securityContext:
+        privileged: true
+      resources:
+        requests:
+          cpu: 250m
+          memory: 512Mi
+        limits:
+          cpu: 2000m
+          memory: 4Gi
+
+    resources:
+      requests:
+        cpu: 250m
+        memory: 512Mi
+      limits:
+        cpu: 2000m
+        memory: 4Gi
