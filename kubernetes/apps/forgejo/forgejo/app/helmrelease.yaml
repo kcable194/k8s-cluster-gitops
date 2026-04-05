@@ -21,9 +21,10 @@ spec:
 
     gitea:
       admin:
-        username: forgejo-admin
+        existingAccount: keep
+        username: kcable194
         password: "${FORGEJO_ADMIN_PASSWORD}"
-        email: "admin@${SECRET_DOMAIN}"
+        email: "keaton.cable@gmail.com"
 
       config:
         APP_NAME: "Forgejo"
