@@ -26,25 +26,17 @@ spec:
               - "self-hosted"
             envs:
               DOCKER_HOST: "tcp://127.0.0.1:2376"
-              DOCKER_TLS_VERIFY: "0"
+              DOCKER_TLS_VERIFY: "1"
 
           container:
             network: ""
             privileged: true
-            docker_host: "tcp://127.0.0.1:2376"
+            docker_host: "-"
 
     dind:
-      enabled: true
       image:
-        repository: docker
+        repository: library/docker
         tag: dind
-      args:
-        - dockerd
-        - --host=tcp://0.0.0.0:2376
-        - --tls=false
-        - --insecure-registry=forgejo-http.forgejo.svc.cluster.local:3000
-      securityContext:
-        privileged: true
       resources:
         requests:
           cpu: 250m
