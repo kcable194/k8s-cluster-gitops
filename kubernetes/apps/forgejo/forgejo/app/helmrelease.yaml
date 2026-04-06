@@ -93,7 +93,7 @@ spec:
         type: LoadBalancer
         port: 22
         annotations:
-          lbipam.cilium.io/ips: "192.168.68.50"
+          lbipam.cilium.io/ips: "192.168.68.51"
 
     postgresql:
       enabled: false
