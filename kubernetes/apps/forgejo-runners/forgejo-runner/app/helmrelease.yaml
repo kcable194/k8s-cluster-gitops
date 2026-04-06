@@ -24,14 +24,13 @@ spec:
               - "ubuntu-latest:docker://catthehacker/ubuntu:act-latest"
               - "docker:docker://node:22-bookworm"
               - "self-hosted"
-            envs:
-              DOCKER_HOST: "tcp://127.0.0.1:2376"
-              DOCKER_TLS_VERIFY: "1"
-
           container:
             network: ""
             privileged: true
             docker_host: "-"
+            options: "--volume /var/run/docker.sock:/var/run/docker.sock"
+            valid_volumes:
+              - "/var/run/docker.sock"
 
     dind:
       image:
