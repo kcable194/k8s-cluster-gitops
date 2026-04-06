@@ -23,6 +23,7 @@ spec:
       nodeDownPodDeletionPolicy: delete-both-statefulset-and-deployment-pod
       orphanAutoDeletion: true
       concurrentAutomaticEngineUpgradePerNodeLimit: 1
+      taintToleration: "node-role.kubernetes.io/ci:NoExecute"
     persistence:
       defaultClass: true
       defaultClassReplicaCount: 2
