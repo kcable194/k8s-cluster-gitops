@@ -18,7 +18,7 @@ spec:
         token: "${FORGEJO_RUNNER_TOKEN}"
         file:
           runner:
-            capacity: 1
+            capacity: 3
             timeout: 3h
             labels:
               - "ubuntu-latest:docker://catthehacker/ubuntu:act-latest"
@@ -38,26 +38,24 @@ spec:
         tag: dind
       resources:
         requests:
-          cpu: 1500m
-          memory: 4Gi
+          cpu: 22
+          memory: 104Gi
         limits:
-          cpu: 2000m
-          memory: 8Gi
+          cpu: 26
+          memory: 118Gi
 
     resources:
       requests:
-        cpu: 250m
-        memory: 256Mi
-      limits:
         cpu: 500m
-        memory: 1Gi
+        memory: 512Mi
+      limits:
+        cpu: 2
+        memory: 2Gi
 
-    affinity:
-      podAntiAffinity:
-        preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 100
-            podAffinityTerm:
-              labelSelector:
-                matchLabels:
-                  app.kubernetes.io/name: forgejo
-              topologyKey: kubernetes.io/hostname
+    nodeSelector:
+      node-role.kubernetes.io/ci: ""
+
+    tolerations:
+      - key: node-role.kubernetes.io/ci
+        operator: Exists
+        effect: NoExecute

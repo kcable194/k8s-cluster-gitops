@@ -1,0 +1,5 @@
+machine:
+  nodeLabels:
+    node-role.kubernetes.io/ci: ""
+  nodeTaints:
+    node-role.kubernetes.io/ci: ":NoExecute"
