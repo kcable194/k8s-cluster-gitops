@@ -41,8 +41,8 @@ spec:
           cpu: 22
           memory: 104Gi
         limits:
-          cpu: 26
-          memory: 118Gi
+          cpu: 22
+          memory: 104Gi
 
     resources:
       requests:
