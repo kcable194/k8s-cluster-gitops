@@ -18,7 +18,7 @@ spec:
         token: "${FORGEJO_RUNNER_TOKEN}"
         file:
           runner:
-            capacity: 2
+            capacity: 1
             timeout: 3h
             labels:
               - "ubuntu-latest:docker://catthehacker/ubuntu:act-latest"
@@ -38,8 +38,8 @@ spec:
         tag: dind
       resources:
         requests:
-          cpu: 250m
-          memory: 512Mi
+          cpu: 1500m
+          memory: 4Gi
         limits:
           cpu: 2000m
           memory: 8Gi
