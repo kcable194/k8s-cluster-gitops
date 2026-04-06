@@ -42,13 +42,23 @@ spec:
           cpu: 250m
           memory: 512Mi
         limits:
-          cpu: 2000m
-          memory: 4Gi
+          cpu: 1500m
+          memory: 3Gi
 
     resources:
       requests:
         cpu: 250m
-        memory: 512Mi
+        memory: 256Mi
       limits:
-        cpu: 2000m
-        memory: 4Gi
+        cpu: 500m
+        memory: 1Gi
+
+    affinity:
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/name: forgejo
+              topologyKey: kubernetes.io/hostname
