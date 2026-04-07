@@ -8,6 +8,17 @@ spec:
     kind: OCIRepository
     name: forgejo-runner
   interval: 1h
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              kind: Deployment
+              name: forgejo-runner
+            patch: |
+              - op: add
+                path: /spec/strategy
+                value:
+                  type: Recreate
   values:
     replicaCount: 1
 
