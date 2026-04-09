@@ -29,7 +29,7 @@ spec:
         token: "${FORGEJO_RUNNER_TOKEN}"
         file:
           runner:
-            capacity: 3
+            capacity: 5
             timeout: 3h
             labels:
               - "ubuntu-latest:docker://catthehacker/ubuntu:act-latest"
