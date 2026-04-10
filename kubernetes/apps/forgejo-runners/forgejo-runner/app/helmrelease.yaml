@@ -15,15 +15,20 @@ spec:
               kind: Deployment
               name: forgejo-runner
             patch: |
-              - op: add
-                path: /spec/strategy
-                value:
+              apiVersion: apps/v1
+              kind: Deployment
+              metadata:
+                name: forgejo-runner
+              spec:
+                strategy:
                   type: Recreate
-              - op: add
-                path: /spec/template/spec/containers/1/volumeMounts/-
-                value:
-                  name: docker-config
-                  mountPath: /root/.docker
+                template:
+                  spec:
+                    containers:
+                      - name: dind
+                        volumeMounts:
+                          - name: docker-config
+                            mountPath: /root/.docker
   values:
     replicaCount: 1
 
