@@ -19,6 +19,17 @@ spec:
                 path: /spec/strategy
                 value:
                   type: Recreate
+              - op: add
+                path: /spec/template/spec/containers/0/volumeMounts/-
+                value:
+                  name: docker-config
+                  mountPath: /data/.docker
+                  readOnly: true
+              - op: add
+                path: /spec/template/spec/containers/0/volumeMounts/-
+                value:
+                  name: runner-cache
+                  mountPath: /data/cache
   values:
     replicaCount: 1
 
