@@ -19,6 +19,12 @@ spec:
                 path: /spec/strategy
                 value:
                   type: Recreate
+              - op: add
+                path: /spec/template/spec/containers/1/volumeMounts/-
+                value:
+                  name: docker-config
+                  mountPath: /root/.docker
+                  readOnly: true
   values:
     replicaCount: 1
 
