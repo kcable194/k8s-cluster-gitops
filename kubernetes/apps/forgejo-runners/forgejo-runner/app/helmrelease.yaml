@@ -24,7 +24,6 @@ spec:
                 value:
                   name: docker-config
                   mountPath: /root/.docker
-                  readOnly: true
   values:
     replicaCount: 1
 
@@ -94,4 +93,4 @@ spec:
       - name: runner-cache
         mountPath: /data/cache
       - name: docker-config
-        mountPath: /root/.docker
+        mountPath: /data/.docker
