@@ -79,7 +79,13 @@ spec:
         hostPath:
           path: /var/cache/forgejo-runner
           type: DirectoryOrCreate
+      - name: docker-config
+        secret:
+          secretName: docker-credentials
+          defaultMode: 0600
 
     volumeMounts:
       - name: runner-cache
         mountPath: /data/cache
+      - name: docker-config
+        mountPath: /root/.docker
