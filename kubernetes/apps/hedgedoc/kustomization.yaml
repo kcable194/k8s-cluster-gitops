@@ -1,0 +1,13 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: hedgedoc
+
+components:
+  - ../../components/sops
+
+resources:
+  - ./namespace.yaml
+  - ./networkpolicies.yaml
+  - ./hedgedoc-postgres/ks.yaml
+  - ./hedgedoc/ks.yaml

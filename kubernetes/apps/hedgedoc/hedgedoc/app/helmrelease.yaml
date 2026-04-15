@@ -1,0 +1,95 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: hedgedoc
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: hedgedoc
+  interval: 1h
+  values:
+    controllers:
+      hedgedoc:
+        strategy: Recreate
+        containers:
+          app:
+            image:
+              repository: quay.io/hedgedoc/hedgedoc
+              tag: 1.10.2
+            env:
+              CMD_DB_URL: "postgres://hedgedoc:${HEDGEDOC_POSTGRES_PASSWORD}@hedgedoc-postgres-rw:5432/hedgedoc"
+              CMD_DOMAIN: "hedgedoc.${SECRET_DOMAIN}"
+              CMD_PROTOCOL_USESSL: "true"
+              CMD_URL_ADDPORT: "false"
+              CMD_PORT: &port 3000
+              CMD_ALLOW_ANONYMOUS: "false"
+              CMD_ALLOW_ANONYMOUS_EDITS: "true"
+              CMD_ALLOW_FREEURL: "true"
+              CMD_DEFAULT_PERMISSION: "limited"
+              CMD_SESSION_SECRET: "${HEDGEDOC_SESSION_SECRET}"
+              CMD_IMAGE_UPLOAD_TYPE: "filesystem"
+              CMD_UPLOADS_DIR: "/hedgedoc/public/uploads"
+              # Uncomment after creating Authentik OIDC provider:
+              # CMD_OAUTH2_PROVIDERNAME: "Authentik"
+              # CMD_OAUTH2_CLIENT_ID: "${HEDGEDOC_OIDC_CLIENT_ID}"
+              # CMD_OAUTH2_CLIENT_SECRET: "${HEDGEDOC_OIDC_CLIENT_SECRET}"
+              # CMD_OAUTH2_AUTHORIZATION_URL: "https://auth.${SECRET_DOMAIN}/application/o/authorize/"
+              # CMD_OAUTH2_TOKEN_URL: "https://auth.${SECRET_DOMAIN}/application/o/token/"
+              # CMD_OAUTH2_USER_PROFILE_URL: "https://auth.${SECRET_DOMAIN}/application/o/userinfo/"
+              # CMD_OAUTH2_SCOPE: "openid email profile"
+              # CMD_OAUTH2_USER_PROFILE_USERNAME_ATTR: "preferred_username"
+              # CMD_OAUTH2_USER_PROFILE_DISPLAY_NAME_ATTR: "name"
+              # CMD_OAUTH2_USER_PROFILE_EMAIL_ATTR: "email"
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /status
+                    port: *port
+                  initialDelaySeconds: 10
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 100m
+              limits:
+                memory: 512Mi
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10000
+        runAsGroup: 10000
+        fsGroup: 10000
+    persistence:
+      uploads:
+        enabled: true
+        type: persistentVolumeClaim
+        storageClass: longhorn
+        accessMode: ReadWriteOnce
+        size: 10Gi
+        globalMounts:
+          - path: /hedgedoc/public/uploads
+    service:
+      app:
+        ports:
+          http:
+            port: *port
+    route:
+      app:
+        hostnames: ["hedgedoc.${SECRET_DOMAIN}"]
+        parentRefs:
+          - name: envoy-external
+            namespace: network
+            sectionName: https
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: *port
