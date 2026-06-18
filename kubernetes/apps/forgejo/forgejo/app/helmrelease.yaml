@@ -78,6 +78,9 @@ spec:
         log:
           LEVEL: info
 
+    initPreScript: |
+      mkdir -p /data/log
+
     persistence:
       enabled: true
       storageClass: longhorn
